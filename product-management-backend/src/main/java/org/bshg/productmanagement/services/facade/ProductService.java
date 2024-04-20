@@ -1,0 +1,29 @@
+package org.bshg.productmanagement.services.facade;
+
+import org.bshg.productmanagement.bean.Product;
+
+import java.util.List;
+
+public interface ProductService {
+    Product findById(Long id);
+
+    List<Product> findAllOptimized();
+
+    List<Product> findAll();
+
+    Product create(Product item);
+
+    List<Product> create(List<Product> item);
+
+    Product update(Product item);
+
+    List<Product> update(List<Product> item);
+
+    void deleteById(Long id);
+
+    void delete(Product item);
+
+    void delete(List<Product> items);
+
+    void deleteByIdIn(List<Long> ids);
+}
