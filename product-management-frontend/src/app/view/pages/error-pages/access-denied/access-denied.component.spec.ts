@@ -1,6 +1,6 @@
-import {ComponentFixture, TestBed} from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import {AccessDeniedComponent} from './access-denied.component';
+import { AccessDeniedComponent } from './access-denied.component';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -10,8 +10,8 @@ describe('AccessDeniedComponent', () => {
     await TestBed.configureTestingModule({
       imports: [AccessDeniedComponent]
     })
-      .compileComponents();
-
+    .compileComponents();
+    
     fixture = TestBed.createComponent(AccessDeniedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

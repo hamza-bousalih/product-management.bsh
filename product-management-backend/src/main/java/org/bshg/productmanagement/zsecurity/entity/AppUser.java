@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import org.bshg.productmanagement.zutils.entity.audit.AuditEntity;
 
 @Entity
@@ -59,12 +58,12 @@ public class AppUser extends AuditEntity implements UserDetails {
     @Override
     public List<Authority> getAuthorities() {
         return roles.stream().flatMap(role -> {
-                    List<Authority> authorities1 = new ArrayList<>();
-                    authorities1.add(new Authority(role.getName()));
-                    authorities1.addAll(role.getPermissions().stream().map(permission -> new Authority(permission.getName())).toList());
-                    return authorities1.stream();
-                })
-                .collect(Collectors.toList());
+                List<Authority> authorities1 = new ArrayList<>();
+                authorities1.add(new Authority(role.getName()));
+                authorities1.addAll(role.getPermissions().stream().map(permission -> new Authority(permission.getName())).toList());
+                return authorities1.stream();
+            })
+            .collect(Collectors.toList());
     }
 
     @Override

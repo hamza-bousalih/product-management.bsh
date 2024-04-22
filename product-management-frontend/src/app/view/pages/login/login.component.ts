@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
-import {AuthService} from 'src/app/controller/auth/services/auth.service';
-import {TokenService} from 'src/app/controller/auth/services/token.service';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/controller/auth/services/auth.service';
+import { TokenService } from 'src/app/controller/auth/services/token.service';
 
 @Component({
   selector: 'app-login',
@@ -14,8 +14,7 @@ import {TokenService} from 'src/app/controller/auth/services/token.service';
 export class LoginComponent {
   loading = false
 
-  constructor(private userService: AuthService, private router: Router, private authService: TokenService) {
-  }
+  constructor(private userService: AuthService, private router: Router, private authService: TokenService) { }
 
   get login() {
     return this.userService.jwtRequest;

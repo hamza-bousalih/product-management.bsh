@@ -1,5 +1,4 @@
 package org.bshg.productmanagement.zsecurity.permissions.resources;
-
 import org.bshg.productmanagement.zsecurity.permissions.PermissionResource;
 
 public enum SupplierPermission implements PermissionResource {

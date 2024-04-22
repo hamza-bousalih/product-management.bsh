@@ -11,12 +11,8 @@ import java.util.List;
 
 @Component
 public class RoleConverter {
-    @Autowired
-    @Lazy
-    private AppUserConverter appUserConverter;
-    @Autowired
-    @Lazy
-    private PermissionConverter permissionConverter;
+    @Autowired @Lazy private AppUserConverter appUserConverter;
+    @Autowired @Lazy private PermissionConverter permissionConverter;
     private boolean user = true;
     private boolean permission = true;
 
@@ -27,7 +23,7 @@ public class RoleConverter {
 
     public final RoleDto toDto(Role item) {
         this.configure(false);
-        if (item == null) return null;
+        if(item == null) return null;
         var dto = new RoleDto();
         dto.setId(item.getId());
         dto.setName(item.getName());
@@ -38,7 +34,7 @@ public class RoleConverter {
     }
 
     public final Role toItem(RoleDto dto) {
-        if (dto == null) return null;
+        if(dto == null) return null;
         var item = new Role();
         item.setId(dto.getId());
         item.setName(dto.getName());

@@ -78,8 +78,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role save(Role role) {
-        Role foundRole = findByName(role.getName());
-        if (foundRole != null) return foundRole;
+        Role foundRole =  findByName(role.getName());
+        if(foundRole != null) return foundRole;
         Set<Permission> perms = new HashSet<>();
         role.getPermissions().forEach(perm -> {
             perms.add(permissionService.save(perm));
