@@ -7,6 +7,7 @@ import org.bshg.productmanagement.services.facade.CustomerService;
 import org.bshg.productmanagement.entity.Supplier;
 import org.bshg.productmanagement.services.facade.SupplierService;
 import org.bshg.productmanagement.zutils.service.ServiceHelper;
+import org.bshg.productmanagement.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +30,18 @@ return dao.findAllOptimized();
 @Transactional(rollbackFor = Exception.class)
 public Product create(Product item) {
 if (item == null) return null;
+// check if customer exists
+var customer = item.getCustomer();
+if (customer != null && customer.getId() != null) {
+var found = customerService.findById(customer.getId());
+if (found == null) throw new NotFoundException("Unknown Given Customer");
+}
+// check if supplier exists
+var supplier = item.getSupplier();
+if (supplier != null && supplier.getId() != null) {
+var found = supplierService.findById(supplier.getId());
+if (found == null) throw new NotFoundException("Unknown Given Supplier");
+}
 return dao.save(item);
 }
 @Transactional(rollbackFor = Exception.class)

@@ -5,6 +5,7 @@ import org.bshg.productmanagement.services.facade.SupplierService;
 import org.bshg.productmanagement.entity.Product;
 import org.bshg.productmanagement.services.facade.ProductService;
 import org.bshg.productmanagement.zutils.service.ServiceHelper;
+import org.bshg.productmanagement.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

@@ -8,7 +8,7 @@ import { Product } from 'src/app/controller/entities/product';
 })
 export class ProductService {
     public readonly api = environment.apiUrl + "product";
-    private _item!: Product;
+    private _item!: Product | null;
     private _items!: Array<Product>;
 
     constructor(private http: HttpClient) { }
@@ -85,7 +85,7 @@ export class ProductService {
         return this._item;
     }
 
-    public set item(value: Product) {
+    public set item(value: Product | null) {
         this._item = value;
     }
 }

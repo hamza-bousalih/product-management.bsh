@@ -1,0 +1,46 @@
+<c-row style="margin-bottom: 1rem;">
+    <c-nav class="justify-content-end">
+        <c-nav-item style="margin-right: 1rem;">
+            <button cButton color="light" routerLink="/admin" (click)="item = null">Cancel</button>
+        </c-nav-item>
+        <c-nav-item>
+            <button cButton color="primary" (click)="update()">Update</button>
+        </c-nav-item>
+    </c-nav>
+</c-row>
+
+<c-card style="margin-bottom: 1rem;">
+    <c-card-body>
+        <c-row class="g-3">
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="firstname">Firstname</label>
+                    <input cFormControl id="firstname" type="text" placeholder="Firstname" [(ngModel)]="item.firstname"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="lastname">Lastname</label>
+                    <input cFormControl id="lastname" type="text" placeholder="Lastname" [(ngModel)]="item.lastname"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="email">Email</label>
+                    <input cFormControl id="email" type="text" placeholder="Email" [(ngModel)]="item.email"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="phone">Phone</label>
+                    <input cFormControl id="phone" type="text" placeholder="Phone" [(ngModel)]="item.phone"/>
+                </div>
+            </c-col>
+
+
+
+        </c-row>
+    </c-card-body>
+</c-card>
+
+

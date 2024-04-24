@@ -1,0 +1,28 @@
+<c-row style="margin-bottom: 1rem;">
+    <c-nav class="justify-content-end">
+        <c-nav-item style="margin-right: 1rem;">
+            <button cButton color="light" routerLink="/supplier" (click)="item = null">Cancel</button>
+        </c-nav-item>
+        <c-nav-item>
+            <button cButton color="primary" (click)="create()">Create</button>
+        </c-nav-item>
+    </c-nav>
+</c-row>
+
+<c-card style="margin-bottom: 1rem;">
+    <c-card-body>
+        <c-row class="g-3">
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="name">Name</label>
+                    <input cFormControl id="name" type="text" placeholder="Name" [(ngModel)]="item.name"/>
+                </div>
+            </c-col>
+
+
+
+        </c-row>
+    </c-card-body>
+</c-card>
+
+

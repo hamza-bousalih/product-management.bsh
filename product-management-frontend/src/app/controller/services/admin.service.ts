@@ -8,7 +8,7 @@ import { Admin } from 'src/app/controller/entities/admin';
 })
 export class AdminService {
     public readonly api = environment.apiUrl + "admin";
-    private _item!: Admin;
+    private _item!: Admin | null;
     private _items!: Array<Admin>;
 
     constructor(private http: HttpClient) { }
@@ -71,7 +71,7 @@ export class AdminService {
         return this._item;
     }
 
-    public set item(value: Admin) {
+    public set item(value: Admin | null) {
         this._item = value;
     }
 }

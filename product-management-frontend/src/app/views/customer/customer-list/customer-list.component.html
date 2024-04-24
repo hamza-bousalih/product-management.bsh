@@ -1,0 +1,68 @@
+<c-row style="margin-bottom: 1rem;">
+    <c-nav class="justify-content-end">
+        <c-nav-item>
+            @if (!loading) {
+            <p>
+                <button cButton color="primary" routerLink="create">Create</button>
+            </p>
+            } @else {
+            <p cPlaceholderAnimation="glow">
+                <button cButton cCol="7" cPlaceholder color="primary" disabled style="width: 100px"></button>
+            </p>
+            }
+        </c-nav-item>
+    </c-nav>
+</c-row>
+
+<c-row>
+    <c-col xs>
+        @if (loading) {
+        <p cPlaceholderAnimation="glow">
+            <span cCol="12" cPlaceholder></span>
+            <span cCol="12" cPlaceholder></span>
+            <span cCol="12" cPlaceholder></span>
+        </p>
+        } @else {
+        <c-card class="mb-4">
+            <c-card-body>
+                <table
+                        [hover]="true"
+                        [responsive]="true"
+                        [striped]="true"
+                        align="middle"
+                        cTable
+                        class="mb-0 border"
+                >
+                    <thead class="text-nowrap text-truncate">
+                    <tr>
+                                                    <th class="bg-body-tertiary">Firstname</th>
+                            <th class="bg-body-tertiary">Lastname</th>
+                            <th class="bg-body-tertiary">Email</th>
+                            <th class="bg-body-tertiary">Phone</th>
+                        <th class="bg-body-tertiary" style="display: flex; justify-content: end;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @for (it of items; track it; let i = $index) {
+                    <tr>
+                            <td>{{ it.firstname }}</td>
+                            <td>{{ it.lastname }}</td>
+                            <td>{{ it.email }}</td>
+                            <td>{{ it.phone }}</td>
+                        <td style="display: flex; justify-content: end;">
+                            <button cButton color routerLink="update" (click)="item = it">
+                                <svg cIcon name="cil-pen" size="lg"></svg>
+                            </button>
+                            <button cButton color (click)="delete(it.id, i)">
+                                <svg cIcon name="cil-trash" size="lg"></svg>
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+            </c-card-body>
+        </c-card>
+        }
+    </c-col>
+</c-row>

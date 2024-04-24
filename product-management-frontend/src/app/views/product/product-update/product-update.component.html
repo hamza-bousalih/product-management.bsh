@@ -1,0 +1,72 @@
+<c-row style="margin-bottom: 1rem;">
+    <c-nav class="justify-content-end">
+        <c-nav-item style="margin-right: 1rem;">
+            <button cButton color="light" routerLink="/product" (click)="item = null">Cancel</button>
+        </c-nav-item>
+        <c-nav-item>
+            <button cButton color="primary" (click)="update()">Update</button>
+        </c-nav-item>
+    </c-nav>
+</c-row>
+
+<c-card style="margin-bottom: 1rem;">
+    <c-card-body>
+        <c-row class="g-3">
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="name">Name</label>
+                    <input cFormControl id="name" type="text" placeholder="Name" [(ngModel)]="item.name"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="marque">Marque</label>
+                    <input cFormControl id="marque" type="text" placeholder="Marque" [(ngModel)]="item.marque"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="sn">Sn</label>
+                    <input cFormControl id="sn" type="text" placeholder="Sn" [(ngModel)]="item.sn"/>
+                </div>
+            </c-col>
+            <c-col sm="4">
+                <div class="mb-3">
+                    <label cLabel for="cab">Cab</label>
+                    <input cFormControl id="cab" type="text" placeholder="Cab" [(ngModel)]="item.cab"/>
+                </div>
+            </c-col>
+
+
+            <c-col sm="4">
+                <label cLabel for="customer">Customer</label>
+                <c-input-group>
+                    <select cSelect id="customer" [(ngModel)]="item.customer.id">
+                        @for (it of customerList; track it) {
+                        <option [value]="it.id">{{ it.id }}</option>
+                        }
+                    </select>
+                    <button cButton color="primary" type="button" variant="outline" routerLink="/customer/create">
+                        create
+                    </button>
+                </c-input-group>
+            </c-col>
+            <c-col sm="4">
+                <label cLabel for="supplier">Supplier</label>
+                <c-input-group>
+                    <select cSelect id="supplier" [(ngModel)]="item.supplier.id">
+                        @for (it of supplierList; track it) {
+                        <option [value]="it.id">{{ it.name }}</option>
+                        }
+                    </select>
+                    <button cButton color="primary" type="button" variant="outline" routerLink="/supplier/create">
+                        create
+                    </button>
+                </c-input-group>
+            </c-col>
+
+        </c-row>
+    </c-card-body>
+</c-card>
+
+

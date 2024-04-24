@@ -55,15 +55,21 @@ public class ServiceHelper {
     public static <T, L>
     void createList( T entity, Function<T, List<L>> getter, BiConsumer<L, T> setter, Function<L,L> creator) {
         List<L> list = getter.apply(entity);
-        if (list != null) {
-            list.forEach(el -> {
-                setter.accept(el, entity);
-                creator.apply(el);
-            });
-        }
+        if (list == null) return;
+        list.forEach(el -> {
+            setter.accept(el, entity);
+            creator.apply(el);
+        });
     }
 
-    public static < T, L>
+    public static <T, L>
+    void createObject(T entity, Function<T, L> getter, Function<L, L> creator) {
+        L object = getter.apply(entity);
+        if (object == null) return;
+        creator.apply(object);
+    }
+
+    public static <T, L>
     void updateList(
         T item,
         List<L> oldList,

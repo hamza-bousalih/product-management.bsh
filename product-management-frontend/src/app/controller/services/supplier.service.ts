@@ -8,7 +8,7 @@ import { Supplier } from 'src/app/controller/entities/supplier';
 })
 export class SupplierService {
     public readonly api = environment.apiUrl + "supplier";
-    private _item!: Supplier;
+    private _item!: Supplier | null;
     private _items!: Array<Supplier>;
 
     constructor(private http: HttpClient) { }
@@ -71,7 +71,7 @@ export class SupplierService {
         return this._item;
     }
 
-    public set item(value: Supplier) {
+    public set item(value: Supplier | null) {
         this._item = value;
     }
 }
