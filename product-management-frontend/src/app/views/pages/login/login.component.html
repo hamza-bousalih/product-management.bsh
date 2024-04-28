@@ -29,6 +29,11 @@
                 <c-row>
                   <c-col xs="6">
                     <button (click)="submit()" cButton class="px-4" color="primary">
+                      @if (loading) {
+                      <c-spinner aria-hidden="true" size="sm"></c-spinner>
+                      } @else {
+                      <svg cIcon name="cilSend"></svg>
+                      }
                       Login
                     </button>
                   </c-col>

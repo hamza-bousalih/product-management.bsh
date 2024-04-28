@@ -5,7 +5,9 @@ import org.bshg.productmanagement.services.facade.SupplierService;
 import org.bshg.productmanagement.entity.Product;
 import org.bshg.productmanagement.services.facade.ProductService;
 import org.bshg.productmanagement.zutils.service.ServiceHelper;
+import org.bshg.productmanagement.zutils.pagination.Pagination;
 import org.bshg.productmanagement.exceptions.NotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -23,6 +25,21 @@ return dao.findAll();
 }
 public List<Supplier> findAllOptimized() {
 return dao.findAllOptimized();
+}
+@Override
+public Pagination<Supplier> findPaginated(int page, int size) {
+var pageable = PageRequest.of(page, size);
+var found = dao.findAll(pageable);
+var items = found.stream().toList();
+return new Pagination<>(
+items,
+found.getNumber(),
+found.getSize(),
+found.getTotalElements(),
+found.getTotalPages(),
+found.isFirst(),
+found.isLast()
+);
 }
 //--------------- CREATE -----------------------------------
 @Transactional(rollbackFor = Exception.class)
@@ -43,6 +60,8 @@ return result;
 @Transactional(rollbackFor = Exception.class)
 public Supplier update(Supplier item) {
 if (item == null || item.getId() == null) return null;
+var oldItem = findById(item.getId());
+if (oldItem == null) throw new NotFoundException("Unknown Supplier To Be Updated!");
 Supplier saved = dao.save(item);
 updateAssociatedList(saved);
 return saved;

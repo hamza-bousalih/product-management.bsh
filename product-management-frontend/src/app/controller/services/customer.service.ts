@@ -1,17 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
+import {Pagination} from "src/app/controller/utils/pagination/pagination";
 import { Customer } from 'src/app/controller/entities/customer';
+import { CustomerValidator } from 'src/app/controller/validators/customer.validator';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CustomerService {
-    public readonly api = environment.apiUrl + "customer";
-    private _item!: Customer | null;
+    private readonly api = environment.apiUrl + "customer";
+    private _item!: Customer | undefined;
     private _items!: Array<Customer>;
+    private _pagination!: Pagination<Customer>
 
-    constructor(private http: HttpClient) { }
+    private http = inject(HttpClient)
+
+    public keepData: boolean = false
+    public returnUrl: string | undefined = undefined
+    public toReturn = () => this.returnUrl != undefined
+
+    constructor(private validator: CustomerValidator) {
+        this.validator.item = () => this.item
+    }
 
     public findAll() {
         return this.http.get<Array<Customer>>(this.api);
@@ -23,6 +32,10 @@ export class CustomerService {
 
     public findAllOptimized() {
         return this.http.get<Array<Customer>>(`${this.api}/optimized`);
+    }
+
+    public findPaginated(page: number = 0, size: number = 10) {
+        return this.http.get<Pagination<Customer>>(`${this.api}/paginated?page=${page}&size=${size}`);
     }
 
     public create() {
@@ -55,13 +68,27 @@ export class CustomerService {
 
 
     //------------- getters and setters -----------------------
-    public get items(): Array<Customer> {
-        if (this._items == null)
+    public get itemIsNull(): boolean {
+        return this._item == undefined
+    }
+
+    public get items() {
+        if (this._items == undefined)
             this._items = [];
         return this._items;
     }
 
-    public set items(value: Array<Customer>) {
+    get pagination() {
+        if (this._pagination == null)
+            this._pagination = new Pagination();
+        return this._pagination;
+    }
+
+    set pagination(value) {
+        this._pagination = value;
+    }
+
+    public set items(value) {
         this._items = value;
     }
 
@@ -71,8 +98,18 @@ export class CustomerService {
         return this._item;
     }
 
-    public set item(value: Customer | null) {
+    public set item(value: Customer | undefined) {
         this._item = value;
+    }
+
+    public get createdItemAfterReturn() {
+        let created = {
+            item: this.item,
+            created: this.toReturn()
+        }
+        this.returnUrl = undefined
+        this.item = undefined
+        return created
     }
 }
 

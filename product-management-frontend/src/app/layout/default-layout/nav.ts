@@ -13,21 +13,21 @@ export const navItems: INavData[] = [
   {
     name: 'Admin',
     url: '/admin',
-    icon: 'nav-icon-bullet',
+    icon: 'cil-square',
   },
   {
     name: 'Product',
     url: '/product',
-    icon: 'nav-icon-bullet',
+    icon: 'cil-square',
   },
   {
     name: 'Customer',
     url: '/customer',
-    icon: 'nav-icon-bullet',
+    icon: 'cil-square',
   },
   {
     name: 'Supplier',
     url: '/supplier',
-    icon: 'nav-icon-bullet',
+    icon: 'cil-square',
   },
 ];

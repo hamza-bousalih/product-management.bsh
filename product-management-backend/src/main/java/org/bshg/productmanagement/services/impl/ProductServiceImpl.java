@@ -7,7 +7,9 @@ import org.bshg.productmanagement.services.facade.CustomerService;
 import org.bshg.productmanagement.entity.Supplier;
 import org.bshg.productmanagement.services.facade.SupplierService;
 import org.bshg.productmanagement.zutils.service.ServiceHelper;
+import org.bshg.productmanagement.zutils.pagination.Pagination;
 import org.bshg.productmanagement.exceptions.NotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -26,21 +28,44 @@ return dao.findAll();
 public List<Product> findAllOptimized() {
 return dao.findAllOptimized();
 }
+@Override
+public Pagination<Product> findPaginated(int page, int size) {
+var pageable = PageRequest.of(page, size);
+var found = dao.findAll(pageable);
+var items = found.stream().toList();
+return new Pagination<>(
+items,
+found.getNumber(),
+found.getSize(),
+found.getTotalElements(),
+found.getTotalPages(),
+found.isFirst(),
+found.isLast()
+);
+}
 //--------------- CREATE -----------------------------------
 @Transactional(rollbackFor = Exception.class)
 public Product create(Product item) {
 if (item == null) return null;
 // check if customer exists
 var customer = item.getCustomer();
-if (customer != null && customer.getId() != null) {
+if (customer != null) {
+if(customer.getId() == null) item.setCustomer(null);
+else {
 var found = customerService.findById(customer.getId());
 if (found == null) throw new NotFoundException("Unknown Given Customer");
+item.setCustomer(found);
+}
 }
 // check if supplier exists
 var supplier = item.getSupplier();
-if (supplier != null && supplier.getId() != null) {
+if (supplier != null) {
+if(supplier.getId() == null) item.setSupplier(null);
+else {
 var found = supplierService.findById(supplier.getId());
 if (found == null) throw new NotFoundException("Unknown Given Supplier");
+item.setSupplier(found);
+}
 }
 return dao.save(item);
 }
@@ -55,6 +80,8 @@ return result;
 @Transactional(rollbackFor = Exception.class)
 public Product update(Product item) {
 if (item == null || item.getId() == null) return null;
+var oldItem = findById(item.getId());
+if (oldItem == null) throw new NotFoundException("Unknown Product To Be Updated!");
 return dao.save(item);
 }
 @Transactional(rollbackFor = Exception.class)

@@ -17,7 +17,7 @@ import {
     TextColorDirective
 } from '@coreui/angular';
 import {AuthService} from "src/app/controller/auth/services/auth.service";
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {TokenService} from "src/app/controller/auth/services/token.service";
 import {FormsModule} from "@angular/forms";
 
@@ -42,7 +42,8 @@ import {FormsModule} from "@angular/forms";
         ButtonDirective,
         NgStyle,
         FormsModule,
-        SpinnerComponent
+        SpinnerComponent,
+        RouterLink
     ]
 })
 export class LoginComponent {

@@ -1,72 +1,79 @@
-<c-row style="margin-bottom: 1rem;">
-    <c-nav class="justify-content-end">
-        <c-nav-item style="margin-right: 1rem;">
-            <button cButton color="light" routerLink="/product" (click)="item = null">Cancel</button>
+@defer (when standAlon) {
+<c-row class="mb-3">
+    <c-nav class="hstack gap">
+        <c-nav-item class="p-2 ms-auto">
+            <button cButton color="secondary" variant="outline" routerLink="/product" (click)="item = undefined">Cancel</button>
         </c-nav-item>
-        <c-nav-item>
-            <button cButton color="primary" (click)="update()">Update</button>
+        <c-nav-item class="p-2">
+            <button cButton color="primary" (click)="update()">
+                @if (sending) {
+                <c-spinner aria-hidden="true" size="sm"></c-spinner>
+                } @else {
+                <svg cIcon name="cilPen"></svg>
+                }
+                Update
+            </button>
         </c-nav-item>
     </c-nav>
 </c-row>
+}
 
-<c-card style="margin-bottom: 1rem;">
+<c-card class="mb-3">
     <c-card-body>
         <c-row class="g-3">
             <c-col sm="4">
-                <div class="mb-3">
-                    <label cLabel for="name">Name</label>
-                    <input cFormControl id="name" type="text" placeholder="Name" [(ngModel)]="item.name"/>
-                </div>
+                <label cLabel for="name">Name</label>
+                <input cFormControl id="name" type="text" placeholder="Name" [(ngModel)]="item.name" name="name" [valid]="validator.name.valid" (blur)="validator.name.validate()"/>
+                <c-form-feedback [valid]="false">{{ validator.name.message }}</c-form-feedback>
             </c-col>
             <c-col sm="4">
-                <div class="mb-3">
-                    <label cLabel for="marque">Marque</label>
-                    <input cFormControl id="marque" type="text" placeholder="Marque" [(ngModel)]="item.marque"/>
-                </div>
+                <label cLabel for="marque">Marque</label>
+                <input cFormControl id="marque" type="text" placeholder="Marque" [(ngModel)]="item.marque" name="marque" [valid]="validator.marque.valid" (blur)="validator.marque.validate()"/>
+                <c-form-feedback [valid]="false">{{ validator.marque.message }}</c-form-feedback>
             </c-col>
             <c-col sm="4">
-                <div class="mb-3">
-                    <label cLabel for="sn">Sn</label>
-                    <input cFormControl id="sn" type="text" placeholder="Sn" [(ngModel)]="item.sn"/>
-                </div>
+                <label cLabel for="sn">Sn</label>
+                <input cFormControl id="sn" type="text" placeholder="Sn" [(ngModel)]="item.sn" name="sn" [valid]="validator.sn.valid" (blur)="validator.sn.validate()"/>
+                <c-form-feedback [valid]="false">{{ validator.sn.message }}</c-form-feedback>
             </c-col>
             <c-col sm="4">
-                <div class="mb-3">
-                    <label cLabel for="cab">Cab</label>
-                    <input cFormControl id="cab" type="text" placeholder="Cab" [(ngModel)]="item.cab"/>
-                </div>
+                <label cLabel for="cab">Cab</label>
+                <input cFormControl id="cab" type="text" placeholder="Cab" [(ngModel)]="item.cab" name="cab" [valid]="validator.cab.valid" (blur)="validator.cab.validate()"/>
+                <c-form-feedback [valid]="false">{{ validator.cab.message }}</c-form-feedback>
             </c-col>
-
-
+            @if (item.customer != null) {
             <c-col sm="4">
                 <label cLabel for="customer">Customer</label>
                 <c-input-group>
-                    <select cSelect id="customer" [(ngModel)]="item.customer.id">
+                    <select cSelect id="customer" name="customer" [(ngModel)]="item.customer.id" [valid]="validator.customer.valid" (blur)="validator.customer.validate()">
                         @for (it of customerList; track it) {
                         <option [value]="it.id">{{ it.id }}</option>
                         }
                     </select>
-                    <button cButton color="primary" type="button" variant="outline" routerLink="/customer/create">
-                        create
+                    <button cButton color="secondary" type="button" variant="outline" (click)="customerReturnUrl = '/customer/create'">
+                        <svg cIcon name="cilPlus"></svg>
                     </button>
+                    <c-form-feedback [valid]="false">{{ validator.customer.message }}</c-form-feedback>
                 </c-input-group>
             </c-col>
+            }
+            @if (item.supplier != null) {
             <c-col sm="4">
                 <label cLabel for="supplier">Supplier</label>
                 <c-input-group>
-                    <select cSelect id="supplier" [(ngModel)]="item.supplier.id">
+                    <select cSelect id="supplier" name="supplier" [(ngModel)]="item.supplier.id" [valid]="validator.supplier.valid" (blur)="validator.supplier.validate()">
                         @for (it of supplierList; track it) {
                         <option [value]="it.id">{{ it.name }}</option>
                         }
                     </select>
-                    <button cButton color="primary" type="button" variant="outline" routerLink="/supplier/create">
-                        create
+                    <button cButton color="secondary" type="button" variant="outline" (click)="supplierReturnUrl = '/supplier/create'">
+                        <svg cIcon name="cilPlus"></svg>
                     </button>
+                    <c-form-feedback [valid]="false">{{ validator.supplier.message }}</c-form-feedback>
                 </c-input-group>
             </c-col>
-
+            }
         </c-row>
     </c-card-body>
 </c-card>
-
 

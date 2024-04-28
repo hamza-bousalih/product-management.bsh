@@ -2,11 +2,13 @@ package org.bshg.productmanagement.services.facade;
 import org.bshg.productmanagement.entity.Product;
 import org.bshg.productmanagement.entity.Customer;
 import org.bshg.productmanagement.entity.Supplier;
+import org.bshg.productmanagement.zutils.pagination.Pagination;
 import java.util.List;
 public interface ProductService {
 Product findById(Long id);
 List<Product> findAllOptimized();
 List<Product> findAll();
+Pagination<Product> findPaginated(int page, int size);
 Product create(Product item);
 List<Product> create(List<Product> item);
 Product update(Product item);

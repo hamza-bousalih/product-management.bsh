@@ -3,6 +3,7 @@ import org.bshg.productmanagement.entity.Customer;
 import org.bshg.productmanagement.services.facade.CustomerService;
 import org.bshg.productmanagement.ws.converter.CustomerConverter;
 import org.bshg.productmanagement.ws.dto.CustomerDto;
+import org.bshg.productmanagement.zutils.pagination.Pagination;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,24 @@ public ResponseEntity<List<CustomerDto>> findAllOptimized() {
 var result = service.findAllOptimized();
 var resultDto = converter.toDto(result);
 return ResponseEntity.ok(resultDto);
+}
+@GetMapping("/paginated")
+public ResponseEntity<Pagination<CustomerDto>> findPaginated(
+@RequestParam(name = "page", defaultValue = "0", required = false) int page,
+@RequestParam(name = "size", defaultValue = "10", required = false) int size
+) {
+var result = service.findPaginated(page, size);
+var resultDto = converter.toDto(result.getData());
+var pagination = new Pagination<>(
+resultDto,
+result.getPage(),
+result.getSize(),
+result.getTotalElements(),
+result.getTotalPages(),
+result.isFirst(),
+result.isLast()
+);
+return ResponseEntity.ok(pagination);
 }
 @PostMapping
 public ResponseEntity<CustomerDto> save(@RequestBody CustomerDto dto) {

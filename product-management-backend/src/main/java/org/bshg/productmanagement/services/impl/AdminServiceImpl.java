@@ -3,7 +3,9 @@ import org.bshg.productmanagement.entity.Admin;
 import org.bshg.productmanagement.dao.AdminDao;
 import org.bshg.productmanagement.services.facade.AdminService;
 import org.bshg.productmanagement.zutils.service.ServiceHelper;
+import org.bshg.productmanagement.zutils.pagination.Pagination;
 import org.bshg.productmanagement.exceptions.NotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -22,6 +24,21 @@ return dao.findAll();
 public List<Admin> findAllOptimized() {
 return findAll();
 }
+@Override
+public Pagination<Admin> findPaginated(int page, int size) {
+var pageable = PageRequest.of(page, size);
+var found = dao.findAll(pageable);
+var items = found.stream().toList();
+return new Pagination<>(
+items,
+found.getNumber(),
+found.getSize(),
+found.getTotalElements(),
+found.getTotalPages(),
+found.isFirst(),
+found.isLast()
+);
+}
 //--------------- CREATE -----------------------------------
 @Transactional(rollbackFor = Exception.class)
 public Admin create(Admin item) {
@@ -39,6 +56,8 @@ return result;
 @Transactional(rollbackFor = Exception.class)
 public Admin update(Admin item) {
 if (item == null || item.getId() == null) return null;
+var oldItem = findById(item.getId());
+if (oldItem == null) throw new NotFoundException("Unknown Admin To Be Updated!");
 return dao.save(item);
 }
 @Transactional(rollbackFor = Exception.class)

@@ -1,17 +1,26 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
+import {Pagination} from "src/app/controller/utils/pagination/pagination";
 import { Product } from 'src/app/controller/entities/product';
+import { ProductValidator } from 'src/app/controller/validators/product.validator';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProductService {
-    public readonly api = environment.apiUrl + "product";
-    private _item!: Product | null;
+    private readonly api = environment.apiUrl + "product";
+    private _item!: Product | undefined;
     private _items!: Array<Product>;
+    private _pagination!: Pagination<Product>
 
-    constructor(private http: HttpClient) { }
+    private http = inject(HttpClient)
+
+    public keepData: boolean = false
+    public returnUrl: string | undefined = undefined
+    public toReturn = () => this.returnUrl != undefined
+
+    constructor(private validator: ProductValidator) {
+        this.validator.item = () => this.item
+    }
 
     public findAll() {
         return this.http.get<Array<Product>>(this.api);
@@ -23,6 +32,10 @@ export class ProductService {
 
     public findAllOptimized() {
         return this.http.get<Array<Product>>(`${this.api}/optimized`);
+    }
+
+    public findPaginated(page: number = 0, size: number = 10) {
+        return this.http.get<Pagination<Product>>(`${this.api}/paginated?page=${page}&size=${size}`);
     }
 
     public create() {
@@ -69,13 +82,27 @@ export class ProductService {
     }
 
     //------------- getters and setters -----------------------
-    public get items(): Array<Product> {
-        if (this._items == null)
+    public get itemIsNull(): boolean {
+        return this._item == undefined
+    }
+
+    public get items() {
+        if (this._items == undefined)
             this._items = [];
         return this._items;
     }
 
-    public set items(value: Array<Product>) {
+    get pagination() {
+        if (this._pagination == null)
+            this._pagination = new Pagination();
+        return this._pagination;
+    }
+
+    set pagination(value) {
+        this._pagination = value;
+    }
+
+    public set items(value) {
         this._items = value;
     }
 
@@ -85,8 +112,18 @@ export class ProductService {
         return this._item;
     }
 
-    public set item(value: Product | null) {
+    public set item(value: Product | undefined) {
         this._item = value;
+    }
+
+    public get createdItemAfterReturn() {
+        let created = {
+            item: this.item,
+            created: this.toReturn()
+        }
+        this.returnUrl = undefined
+        this.item = undefined
+        return created
     }
 }
 

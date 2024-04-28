@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {DefaultLayoutComponent} from './layout';
+import {authGuard} from "src/app/controller/auth/auth.guard";
 
 export const routes: Routes = [
   {
@@ -10,6 +11,7 @@ export const routes: Routes = [
   {
     path: '',
     component: DefaultLayoutComponent,
+    canActivate: [authGuard],
     data: {title: 'Home'},
     children: [
       {
@@ -18,12 +20,12 @@ export const routes: Routes = [
       },
       {
         path: '',
-        loadChildren: () => import('./views//routes').then((m) => m.routes)
+        loadChildren: () => import('./views/routes').then((m) => m.routes)
       },
       {
-        path: 'charts',
-        loadChildren: () => import('./views/charts/routes').then((m) => m.routes)
-      },
+        path: 'pages',
+        loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
+      }
     ]
   },
 
