@@ -1,1 +1,79 @@
+pipeline {
+    agent any
 
+    environment {
+        // Define environment variables if needed
+        MAVEN_HOME = tool 'Maven'  // Use the name of the Maven installation in Jenkins
+        JAVA_HOME = tool 'JDK11'   // Use the name of the JDK installation in Jenkins (change version as needed)
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout code from the repository
+                git 'https://github.com/hamza-bousalih/product-management-sirpfe.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                script {
+                    // Run the Maven build
+                    withEnv(["PATH+MAVEN=${MAVEN_HOME}/bin"]) {
+                        sh 'mvn clean install -DskipTests'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                script {
+                    // Run tests
+                    withEnv(["PATH+MAVEN=${MAVEN_HOME}/bin"]) {
+                        sh 'mvn test'
+                    }
+                }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                script {
+                    // Package the application
+                    withEnv(["PATH+MAVEN=${MAVEN_HOME}/bin"]) {
+                        sh 'mvn package'
+                    }
+                }
+            }
+        }
+
+        stage('Deploy') {
+            when {
+                branch 'main' // Only deploy from the main branch
+            }
+            steps {
+                script {
+                    // Deploy the application (customize this as needed)
+                    echo 'Deploying the application...'
+                    // Example: copying the JAR file to a deployment directory or server
+                    // sh 'scp target/your-app.jar user@server:/path/to/deployment/dir'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Archive build artifacts and test results
+            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+            junit 'target/surefire-reports/*.xml'
+        }
+        success {
+            echo 'Build completed successfully.'
+        }
+        failure {
+            echo 'Build failed.'
+        }
+    }
+}
